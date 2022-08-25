@@ -1,10 +1,11 @@
-import services, { api, method, parseToQueryString } from "../services.js";
+import services, { api, hostName, method } from "../services.js";
 
 const time = Date.now();
+// let _hostName = '';
 
-const place = async () => {
+const place = async (hostName) => {
     //Place Order
-    const placeOrderParams = {
+    const params = {
         symbol: 'BTCBUSD',
         side: 'SELL',
         type: 'LIMIT',
@@ -14,14 +15,12 @@ const place = async () => {
         recvWindow: 5000,
         timestamp: time
     }
-    const placeOrder = parseToQueryString(placeOrderParams);
-    const orderSignature = await services.sign(placeOrder);
 
-    const order = await services.httpCall.signed(
-        api.order,
+    const order = await services.httpsCall.signed(
+        hostName,
         method.post,
-        placeOrder,
-        orderSignature
+        api.order,
+        params
     );
 
     console.log('\n ***** Placed Account *****');
@@ -30,21 +29,19 @@ const place = async () => {
     return order;
 }
 
-const query = async (orderId) => {
-    const queryOrderParams = {
+const query = async (hostName, orderId) => {
+    const params = {
         symbol: 'BTCBUSD',
         orderId: orderId,
         recvWindow: 5000,
         timestamp: time
     }
-    const queryOrder = parseToQueryString(queryOrderParams);
-    const queryOrderSignature = await services.sign(queryOrder);
 
-    const order = await services.httpCall.signed(
-        api.order,
+    const order = await services.httpsCall.signed(
+        hostName,
         method.get,
-        queryOrder,
-        queryOrderSignature
+        api.order,
+        params
     );
 
     console.log('\n ***** Query Order *****');
@@ -52,21 +49,19 @@ const query = async (orderId) => {
     console.log('\n');
 }
 
-const cancel = async (orderId) => {
-    const cancelOrderParams = {
+const cancel = async (hostName, orderId) => {
+    const params = {
         symbol: 'BTCBUSD',
         orderId: orderId,
         recvWindow: 5000,
         timestamp: time
     }
-    const cancelOrder = parseToQueryString(cancelOrderParams);
-    const cancelOrderSignature = await services.sign(cancelOrder);
 
-    const order = await services.httpCall.signed(
-        api.order,
+    const order = await services.httpsCall.signed(
+        hostName,
         method.delete,
-        cancelOrder,
-        cancelOrderSignature
+        api.order,
+        params
     );
 
     console.log('\n ***** Canceled Order *****');
@@ -74,10 +69,23 @@ const cancel = async (orderId) => {
     console.log('\n');
 }
 
-const order = {
-    place: place,
-    query: query,
-    cancel: cancel
+class Order {
+
+    constructor(hostName) {
+        this._hostName = hostName;
+    }
+
+    async place() {
+        return await place(this._hostName);
+    }
+
+    async query(orderId) {
+        return await query(this._hostName, orderId);
+    }
+
+    async cancel(orderId) {
+        return await cancel(this._hostName, orderId);
+    }
 }
 
-export default order;
+export default Order;

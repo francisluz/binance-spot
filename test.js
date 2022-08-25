@@ -1,14 +1,19 @@
-import account from "./modules/account.js";
-import order from "./modules/order.js";
+import Account from "./modules/account.js";
+import Order from "./modules/order.js";
+import { hostName } from "./services.js";
 
 try {
-// Tasks:
-// 1. Implement a simple HTTP wrapper to perform signed request
-// 2. Log to console current non 0 asset balances available on the SPOT account
-// 3. Place an LIMIT order on the order book
-// 4. Query the created orders and log its state to console
-// 5. Cancel the order
-// 6. Perform step 2 again
+    // Tasks:
+    // 1. Implement a simple HTTP wrapper to perform signed request
+    // 2. Log to console current non 0 asset balances available on the SPOT account
+    // 3. Place an LIMIT order on the order book
+    // 4. Query the created orders and log its state to console
+    // 5. Cancel the order
+    // 6. Perform step 2 again
+
+    //Init modules
+    const account = new Account(hostName.testnet);
+    const order = new Order(hostName.testnet);
 
     //2. Query Account
     await account.query();

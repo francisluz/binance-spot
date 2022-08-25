@@ -4,8 +4,12 @@ import * as dotenv from 'dotenv';
 
 dotenv.config()
 
-export const parseToQueryString = (params) => Object.keys(params).map(key => key + '=' + params[key]).join('&');
+export const parseQueryString = (params) => Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
+export const hostName = {
+    testnet: 'testnet.binance.vision',
+    mainnet: 'api.binance.com'
+}
 
 export const api = {
     order: '/api/v3/order',
@@ -20,12 +24,16 @@ export const method = {
     delete: 'DELETE',
 }
 
-const signed = (api, method, apiParams, signature) => {
+const signed = (hostname, method, api, apiParams) => {
     return new Promise(async (resolve, reject) => {
-        const pathParams = `${api}?${apiParams}&signature=${signature}` 
 
+        const queryString = parseQueryString(apiParams);
+        const signature = await sign(queryString);
+
+        const pathParams = api.concat(['?', queryString, '&signature=', signature].join('')); //`${api}?${queryString}&signature=${signature}` 
+        
         const options = {
-            hostname: 'testnet.binance.vision',
+            hostname: hostname,
             port: 443,
             path: pathParams,
             method: method,
@@ -39,7 +47,6 @@ const signed = (api, method, apiParams, signature) => {
             let body = [];
             res.on('data', (data) => {
                 body.push(data);
-                // process.stdout.write(data);
             });
 
             res.on('end', () => {
@@ -75,7 +82,7 @@ const sign = (data) => new Promise((resolve, reject) => {
 
 
 const services = {
-    httpCall: {
+    httpsCall: {
         signed: signed
     },
     sign: sign
