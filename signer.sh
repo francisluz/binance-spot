@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Set up authentication:
-apiKey="2sfDAmM1cpuCebrml7hXXd7eXOV7e75uL1OYVSVzcyXEyTBb9Jqnm41TR40I0EOg"
-secretKey="UJUuUR0473shoO3YhsI6rU6BHb6PUspts1YUNSfbfnWeJtjyZWoPkgsjKduzpIS2"
+apiKey=""
+secretKey=""
 
 # Set up the request:
 apiMethod="POST"
