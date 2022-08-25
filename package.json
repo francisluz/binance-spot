@@ -1,0 +1,29 @@
+{
+  "name": "binance-spot",
+  "version": "1.0.0",
+  "description": "NodeJS Serve with SPOT API",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francisluz/binance-spot.git"
+  },
+  "keywords": [
+    "binance",
+    "nodejs"
+  ],
+  "author": "Francis Luz",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/francisluz/binance-spot/issues"
+  },
+  "homepage": "https://github.com/francisluz/binance-spot#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "openssl-nodejs": "^1.0.5"
+  }
+}
